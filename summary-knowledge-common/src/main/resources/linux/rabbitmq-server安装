@@ -1,0 +1,13 @@
+1.yum install yum-plugin-versionlock 安装yum版本锁定插件
+The /etc/yum/pluginconf.d/versionlock.list will be created on the system.
+
+2.yum versionlock gcc-* 锁定gcc
+To install or lock the version of the gcc package, 
+add that package name to the /etc/yum/pluginconf.d/versionlock.list file by running:
+
+Yum will attempt to update all packages, while excluding the packages listed in the versionlock file.
+
+3.yum versionlock list 查看版本锁定列表
+
+4.yum versionlock clear 清除列表
+

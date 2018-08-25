@@ -1,5 +1,10 @@
 package mj.debris.collecting.summary_knowledge_redis;
 
+import java.lang.reflect.Proxy;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -33,6 +38,8 @@ public class AppTest
      */
     public void testApp()
     {
+    	Set<?> set  = new HashSet<Object>();
+    	ConcurrentHashMap<String, String> map = new ConcurrentHashMap<String, String>();
         assertTrue( true );
     }
 }

@@ -1,0 +1,21 @@
+1.reentrantlock(可重入锁) 和synchronized 区别
+
+Synchronized引入偏向锁和自旋锁后，两者性能差不多。
+
+在锁的粒度和灵活度上reentrantlock优于synchronized
+
+synchronized随机唤醒线程，reentrantlock可以指定公平锁还是非公平锁.
+
+提供了一个Condition（条件）类，用来实现分组唤醒需要唤醒的线程们，而不是像synchronized要么随机唤醒一个线程要么唤醒全部线程。
+
+ReenTrantLock提供了一种能够中断等待锁的线程的机制，通过lock.lockInterruptibly()来实现这个机制。
+
+ReenTrantLock基于AQS来实现，而AQS的基础就是CAS
+
+2.CAS  unsafe.compareAndSwapInt(this, stateOffset, expect, update);
+CPU指令对CAS的支持，CAS是一种系统原语，属于操作系统用于规范。
+,是由若干条指令组成，用于完成某个功能的过程，并且原语的执行必须是连续的，在执行
+过程中不允许被中断，不会造成所谓的数据不一致问题。
+
+3.transient 关键字:java 的transient关键字为我们提供了便利，你只需要实现Serilizable接口，将不需要序列化的属性前添加关键字transient，
+序列化对象的时候，这个属性就不会序列化到指定的目的地中。

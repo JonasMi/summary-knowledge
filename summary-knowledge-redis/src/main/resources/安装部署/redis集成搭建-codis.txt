@@ -1,0 +1,21 @@
+1.安装git
+yum -y install git
+
+2.安装go
+yum -y install golang
+
+3.新建coids目录 
+
+mkdir -p $GOPATH/src/github.com/CodisLabs
+
+4.下载coids源码编译
+
+cd $_ && git clone https://github.com/CodisLabs/codis.git -b release3.2
+
+5.cd $GOPATH/src/github.com/CodisLabs/codis && make
+
+6.一系列脚本启动(规划好codis目录)
+
+7.页面配置集群分组
+
+8.其它的和twemproxy相同

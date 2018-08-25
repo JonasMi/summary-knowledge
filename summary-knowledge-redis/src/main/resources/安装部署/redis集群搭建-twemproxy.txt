@@ -1,0 +1,231 @@
+https://blog.csdn.net/shmilychan/article/details/73433804
+
+基于  keepalived  haproxy twemproxy redis slaveof Sentinel 搭建的redis高可用集群
+1.下载redis
+wget http://download.redis.io/releases/redis-4.0.11.tar.gz
+
+2.解压
+tar -xvf redis-4.0.11.tar.gz
+
+3.基础安装
+yum install -y git gcc make g++ gcc-c++ automake openssl-devel zlib-*
+
+4.编译redis
+make MALLOC=libc
+
+5.创建redis bin目录以及配置文件目录
+mkdir /usr/local/redis/bin &&  mkdir /usr/local/redis/conf/
+
+6.移动redis可执行文件以及配置文件到相应的目录
+cp redis-server /usr/local/redis/bin
+cp redis-conf /usr/local/redis/conf
+
+7.复制三份配置文件(一主两从)
+cd /usr/local/redis/conf
+cp redis-conf redis-6379.conf
+cp redis-conf redis-6380.conf
+cp redis-conf redis-6381.conf
+修改redis-6380.conf redis-6381.conf 配置文件中的端口号 绑定地址为0.0.0.0 主从配置 pid文件名
+
+8.添加哨兵机制
+cp redis-sentinel /usr/local/redis/bin
+cp sentinel.conf /usr/local/redis/conf
+cp sentinel.conf sentinel-26379.conf
+cp sentinel.conf sentinel-26380.conf
+cp sentinel.conf sentinel-26381.conf
+修改sentinel.conf sentinel-26379.conf
+配置哨兵监听端口：port 26379 
+配置哨兵的工作目录：dir /usr/data/redis/sentinel-26379 
+设置监控的master：sentinel monitor mymaster 127.0.0.1 6379 2
+设置master的认证信息：sentinel auth-pass mymaster mldnjava 
+设置master不活跃的时间：sentinel down-after-milliseconds mymaster 30000 
+选举新的master失败时间：sentinel failover-timeout mymaster 180000 
+只有一个master同步：sentinel parallel-syncs mymaster 1 
+撤销Redis保护模式：protected-mode no
+其它两个配置文件按照相同步骤修改
+
+9.启动哨兵
+redis-sentinel ../conf/sentinel-26379.conf &
+redis-sentinel ../conf/sentinel-26380.conf &
+redis-sentinel ../conf/sentinel-26381.conf &
+
+10.twemproxy安装
+wget http://ftp.gnu.org/gnu/autoconf/autoconf-2.69.tar.gz
+wget http://ftp.gnu.org/gnu/automake/automake-1.12.1.tar.gz
+wget http://ftp.gnu.org/gnu/libtool/libtool-2.2.4.tar.gz
+
+依次解压，./configure  make && make install
+
+git clone https://github.com/twitter/twemproxy.git
+cd twemproxy
+autoreconf -fvi
+ ./configure --enable-debug=full
+make
+src/nutcracker -h
+
+12.twemproxy配置
+mkdir -p /usr/local/twemproxy/sbin/conf
+cp nutcracker /usr/local/twemproxy/sbin
+cp nutcracker.yml /usr/local/twemproxy/sbin/conf
+
+13.修改配置文件并启动
+/usr/local/twemproxy/sbin/nutcracker -c /usr/local/twemproxy/sbin/conf/nutcracker.yml -p /usr/local/twemproxy/pid/nutcracker.pid -o /usr/local/twemproxy/logs/nutcractker.log -d
+
+基于twemproxy分片集群搭建完成
+
+14.twemproxy 集成sentinel
+/usr/local/twemproxy/sh/client-reconfig.sh
+#!/bin/sh 
+#
+monitor_name="$1"
+master_old_ip="$4"
+master_old_port="$5"
+master_new_ip="$6"
+master_new_port="$7"
+twemproxy_name=$(echo $monitor_name |awk -F'_' '{print $1"_"$2}')
+
+twemproxy_bin="/usr/local/twemproxy/sbin/nutcracker"
+twemproxy_conf="/usr/local/twemproxy/conf/${twemproxy_name}.conf"
+twemproxy_pid="/usr/local/twemproxy/pid/${twemproxy_name}.pid"
+twemproxy_log="/usr/local/twemproxy/logs/${twemproxy_name}.log"
+twemproxy_cmd="${twemproxy_bin} -c ${twemproxy_conf} -p ${twemproxy_pid} -o ${twemproxy_log} -d"
+
+sed -i "s/${master_old_ip}:${master_old_port}/${master_new_ip}:${master_new_port}/" ${twemproxy_conf}
+
+ps -ef |grep "${twemproxy_cmd}" |grep -v grep |awk '{print $2}'|xargs kill
+${twemproxy_cmd}
+
+sleep 1
+ps -ef |grep "${twemproxy_cmd}" |grep -v grep
+
+
+
+/usr/local/redis/bin/redis-cli -h 192.168.125.162 -p 26379 sentinel set redis_master_group1 client-reconfig-script /usr/local/twemproxy/sh/client-reconfig.sh
+
+/usr/local/redis/bin/redis-cli -h 192.168.125.162 -p 26379 sentinel set redis_master_group2 client-reconfig-script /usr/local/twemproxy/sh/client-reconfig.sh
+
+/usr/local/redis/bin/redis-cli -h 192.168.125.162 -p 26379 sentinel set redis_master_group3 client-reconfig-script /usr/local/twemproxy/sh/client-reconfig.sh
+
+
+15.安装haproxy
+yum -y install haproxy
+16.配置然后启动
+vi /etc/haproxy/haproxy.cfg
+global
+        log 127.0.0.1   local0
+        log 127.0.0.1   local1 notice
+        #log loghost    local0 info
+        maxconn 4096
+        chroot /usr/local/haproxy
+        pidfile /usr/data/haproxy/haproxy.pid
+        uid 99
+        gid 99
+        daemon
+        #debug
+        #quiet
+
+defaults
+        log     global
+        mode    tcp
+        option  httplog
+        option  dontlognull
+        retries 3
+        redispatch
+        maxconn 2000
+        contimeout      5000
+        clitimeout      50000
+        srvtimeout      50000
+
+listen  appli1-rewrite 0.0.0.0:10001
+        cookie  SERVERID rewrite
+        balance roundrobin
+        option  abortonclose
+        option  redispatch
+        retries 3
+        maxconn 2000
+        timeout connect 5000
+        timeout client  50000
+        timeout server  50000
+
+listen  proxy_status 
+        bind :16001
+        mode tcp
+        balance roundrobin
+        server tw_proxy_1 192.168.125.165:22121 check inter 10s
+        server tw_proxy_2 192.168.125.166:22121 check inter 10s
+        server tw_proxy_3 192.168.125.167:22121 check inter 10s
+
+frontend admin_stats
+        bind :7777
+        mode http
+        stats enable
+        option httplog
+        maxconn 10
+        stats refresh 30s
+        stats uri /admin
+        stats auth mldn:java
+        stats hide-version
+        stats admin if TRUE
+
+systemctl start haproxy
+
+17.为了防止单点故障需要用Keepalived实现高可用机制 安装
+yum -y install keepalived
+
+18.修改配置文件 虚拟一个ip出来ok
+! Configuration File for keepalived
+
+global_defs {
+   notification_email {
+     acassen@firewall.loc
+     failover@firewall.loc
+     sysadmin@firewall.loc
+   }
+   notification_email_from Alexandre.Cassen@firewall.loc
+   smtp_server 192.168.200.1
+   smtp_connect_timeout 30
+   router_id LVS_DEVEL
+   vrrp_skip_check_adv_addr
+   vrrp_strict
+   vrrp_garp_interval 0
+   vrrp_gna_interval 0
+}
+
+vrrp_instance VI_1 {
+    state MASTER
+    interface ens33
+    virtual_router_id 51
+    priority 100
+    advert_int 1
+    authentication {
+        auth_type PASS
+        auth_pass 1111
+    }
+    virtual_ipaddress {
+        192.168.68.250
+    }
+}
+
+virtual_server 192.168.205.250 16001 {
+    delay_loop 6
+    lb_algo rr
+    lb_kind NAT
+    persistence_timeout 50
+    protocol TCP
+
+    real_server 192.168.205.138 16001 {
+        weight 1
+        TCP_CHECK {
+            connect_timeout 3
+            delay_before_retry 3
+        }
+    }
+    real_server 192.168.205.137 16001 {
+        weight 1
+        TCP_CHECK {
+            connect_timeout 3
+            delay_before_retry 3
+        }
+    }
+}
+集成搭建完成
