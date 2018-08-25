@@ -1,6 +1,5 @@
 package mj.debris.collecting.summary_knowledge_redis;
 
-import java.lang.reflect.Proxy;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -36,7 +35,8 @@ public class AppTest
     /**
      * Rigourous Test :-)
      */
-    public void testApp()
+    @SuppressWarnings("unused")
+	public void testApp()
     {
     	Set<?> set  = new HashSet<Object>();
     	ConcurrentHashMap<String, String> map = new ConcurrentHashMap<String, String>();

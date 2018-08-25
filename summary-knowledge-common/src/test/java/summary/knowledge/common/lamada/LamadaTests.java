@@ -12,6 +12,7 @@ import org.junit.Test;
 
 public class LamadaTests {
 
+	@SuppressWarnings("unused")
 	@Test
 	public void test1() {
 
@@ -24,7 +25,7 @@ public class LamadaTests {
 		// 2
 		List<Map<String, String>> list = new ArrayList<>();
 		Stream<String> names = list.stream().<String>map(p -> p.get(""));
-		// 3×ªĞÍ
+		// 3×ªï¿½ï¿½
 		Object o = (Runnable) () -> System.out.println("");
 
 		//

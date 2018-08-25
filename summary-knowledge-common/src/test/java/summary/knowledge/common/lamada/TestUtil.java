@@ -3,8 +3,6 @@ package summary.knowledge.common.lamada;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -28,10 +26,10 @@ public class TestUtil {
     public static final int MAX_DECRYPT_BLOCK = 128;
 
     public static KeyPair generateKeyPair() {
-        // ÊµÀý»¯ÃÜÔ¿Éú³ÉÆ÷
+        // Êµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         try {
             KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(KEY_ALGORITHM);
-            // ³õÊ¼»¯ÃÜÔ¿Éú³ÉÆ÷
+            // ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½Ô¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             keyPairGenerator.initialize(1024);
             return keyPairGenerator.generateKeyPair();
         } catch (Exception e) {
@@ -39,21 +37,21 @@ public class TestUtil {
         }
     }
 
-    // ´ÓÖ¤ÊéÎÄ¼þÖÐ¼ÓÔØ¹«Ô¿
+    // ï¿½ï¿½Ö¤ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½Ð¼ï¿½ï¿½Ø¹ï¿½Ô¿
     public static PublicKey getPublicKeyFromCert(InputStream in) throws Exception {
         CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
         X509Certificate x509certificate = (X509Certificate) certificateFactory.generateCertificate(in);
         return x509certificate.getPublicKey();
     }
 
-    // ´ÓpfxÎÄ¼þÖÐ¼ÓÔØË½Ô¿
+    // ï¿½ï¿½pfxï¿½Ä¼ï¿½ï¿½Ð¼ï¿½ï¿½ï¿½Ë½Ô¿
     public static PrivateKey getPrivateKeyFromPfx(InputStream in, String keyStorePwd, String privateKeyPwd, String entry) throws Exception {
         KeyStore keyStore = KeyStore.getInstance("pkcs12");
         keyStore.load(in, keyStorePwd.toCharArray());
         return (PrivateKey) keyStore.getKey(entry, privateKeyPwd.toCharArray());
     }
 
-    // ´ÓpfxÎÄ¼þÖÐ¼ÓÔØ¹«Ô¿
+    // ï¿½ï¿½pfxï¿½Ä¼ï¿½ï¿½Ð¼ï¿½ï¿½Ø¹ï¿½Ô¿
     public static PublicKey getPublicKeyFromPfx(InputStream in, String keyStorePwd, String entry) throws Exception {
         KeyStore keyStore = KeyStore.getInstance("pkcs12");
         keyStore.load(in, keyStorePwd.toCharArray());
@@ -61,7 +59,7 @@ public class TestUtil {
         return certificate.getPublicKey();
     }
 
-    // ¹«Ô¿¼ÓÃÜ
+    // ï¿½ï¿½Ô¿ï¿½ï¿½ï¿½ï¿½
     public static byte[] encrypt(byte[] content, PublicKey publicKey) throws Exception {
         Cipher cipher = Cipher.getInstance(KEY_ALGORITHM);
         cipher.init(Cipher.ENCRYPT_MODE, publicKey);
@@ -73,7 +71,7 @@ public class TestUtil {
         return segmentEncryptOrDecrypt(content, cipher, maxEncryptBlock);
     }
 
-    // Ë½Ô¿¼ÓÃÜ
+    // Ë½Ô¿ï¿½ï¿½ï¿½ï¿½
     public static byte[] encrypt(byte[] content, PrivateKey privateKey) throws Exception {
         Cipher cipher = Cipher.getInstance(KEY_ALGORITHM);
         cipher.init(Cipher.ENCRYPT_MODE, privateKey);
@@ -85,7 +83,7 @@ public class TestUtil {
         return segmentEncryptOrDecrypt(content, cipher, maxEncryptBlock);
     }
 
-    // Ë½Ô¿½âÃÜ
+    // Ë½Ô¿ï¿½ï¿½ï¿½ï¿½
     public static byte[] decrypt(byte[] content, PrivateKey privateKey) throws Exception {
         Cipher cipher = Cipher.getInstance(KEY_ALGORITHM);
         cipher.init(Cipher.DECRYPT_MODE, privateKey);
@@ -98,7 +96,7 @@ public class TestUtil {
         return segmentEncryptOrDecrypt(content, cipher, maxDecryptBlock);
     }
 
-    // ¹«Ô¿½âÃÜ
+    // ï¿½ï¿½Ô¿ï¿½ï¿½ï¿½ï¿½
     public static byte[] decrypt(byte[] content, PublicKey publicKey) throws Exception {
         Cipher cipher = Cipher.getInstance(KEY_ALGORITHM);
         cipher.init(Cipher.DECRYPT_MODE, publicKey);
@@ -110,7 +108,7 @@ public class TestUtil {
         return segmentEncryptOrDecrypt(content, cipher, maxDecryptBlock);
     }
 
-    // ¹«Ô¿½âÃÜ
+    // ï¿½ï¿½Ô¿ï¿½ï¿½ï¿½ï¿½
     public static byte[] decryptBase64String(String content, PublicKey publicKey) throws Exception {
         byte[] b = Base64.getDecoder().decode(content);
         return decrypt(b, publicKey);
@@ -122,7 +120,7 @@ public class TestUtil {
         int offSet = 0;
         byte[] cache;
         int i = 0;
-        // ¶ÔÊý¾Ý·Ö¶Î¼Ó½âÃÜ
+        // ï¿½ï¿½ï¿½ï¿½ï¿½Ý·Ö¶Î¼Ó½ï¿½ï¿½ï¿½
         while (inputLen - offSet > 0) {
             if (inputLen - offSet > block) {
                 cache = cipher.doFinal(content, offSet, block);
@@ -144,8 +142,8 @@ public class TestUtil {
 
     public static void main(String[] args) throws Exception {
         String key = buildKey("yanghao","bdeb6419702654ff4bfd36774473804ea3ea76559b4186c1a35e438eeba92f2b");
-        /*InputStream in = TestUtil.class.getClassLoader().getResourceAsStream("download.crt");*///cdr½çÃæÏÂÔØµÄ¹«³×
-        InputStream in = new FileInputStream("D:\\ÎÒµÄÎÄµµ\\Downloads\\download (5).crt");
+        /*InputStream in = TestUtil.class.getClassLoader().getResourceAsStream("download.crt");*///cdrï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ØµÄ¹ï¿½ï¿½ï¿½
+        InputStream in = new FileInputStream("D:\\ï¿½Òµï¿½ï¿½Äµï¿½\\Downloads\\download (5).crt");
         PublicKey tenantPublicKey = getPublicKeyFromCert(in);
         
         byte[] b = encrypt(key.getBytes(StandardCharsets.UTF_8), tenantPublicKey);

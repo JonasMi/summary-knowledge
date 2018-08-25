@@ -13,14 +13,14 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import org.junit.Test;
 
-import com.google.common.util.concurrent.MoreExecutors;
-
 public class MapTests {
 	
+	@SuppressWarnings("unused")
 	private Object object;
 	
 	//VisualVM
 	
+	@SuppressWarnings("unused")
 	@Test
 	public void test() {
 		List<String> list = Collections.synchronizedList(new ArrayList<>());
