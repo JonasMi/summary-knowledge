@@ -49,6 +49,8 @@
 				<module>summary-knowledge-springbatch</module>
 				<module>summary-knowledge-springintergration</module>
 				<module>summary-knowledge-zk</module>
+				<module>summary-knowledge-springmvc</module>
+				<module>summary-knowledge-webservice</module>
 			</modules>
 		</profile>
 	</profiles>
