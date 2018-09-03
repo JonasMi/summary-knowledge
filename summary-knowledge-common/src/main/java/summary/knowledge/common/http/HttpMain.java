@@ -20,6 +20,9 @@ public class HttpMain {
          * restTemplate.getForObject("ur", Object.class);
          *
          *
+         *
+         *
+         *
          */
         /* restTemplate.postForObject(url, request, responseType, uriVariables) */
         RestTemplate restTemplate = new RestTemplate();
