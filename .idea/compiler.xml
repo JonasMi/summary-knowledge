@@ -1,33 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <annotationProcessing>
-      <profile name="Maven default annotation processors profile" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <module name="healthcheck-sofa-boot-starter" />
-        <module name="infra-sofa-boot-starter" />
-        <module name="isle-sofa-boot-starter" />
-        <module name="runtime-sofa-boot-starter" />
-        <module name="summary-knowledge-amqp" />
-        <module name="summary-knowledge-axon" />
-        <module name="summary-knowledge-common" />
-        <module name="summary-knowledge-elasticsearch" />
-        <module name="summary-knowledge-jpa" />
-        <module name="summary-knowledge-kafka" />
-        <module name="summary-knowledge-mongo" />
-        <module name="summary-knowledge-quartz" />
-        <module name="summary-knowledge-redis" />
-        <module name="summary-knowledge-solr" />
-        <module name="summary-knowledge-spark" />
-        <module name="summary-knowledge-springbatch" />
-        <module name="summary-knowledge-springintergration" />
-        <module name="summary-knowledge-springmvc" />
-        <module name="summary-knowledge-webservice" />
-        <module name="summary-knowledge-zk" />
-        <module name="test-sofa-boot-starter" />
-      </profile>
-    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="healthcheck-sofa-boot-starter" target="1.7" />
+      <module name="infra-sofa-boot-starter" target="1.7" />
+      <module name="isle-sofa-boot-starter" target="1.7" />
+      <module name="runtime-sofa-boot-starter" target="1.7" />
+      <module name="sofa-boot-runtime" target="1.7" />
+      <module name="summary-knowledge-amqp" target="1.8" />
+      <module name="summary-knowledge-axon" target="1.8" />
+      <module name="summary-knowledge-common" target="1.8" />
+      <module name="summary-knowledge-elasticsearch" target="1.8" />
+      <module name="summary-knowledge-jpa" target="1.8" />
+      <module name="summary-knowledge-kafka" target="1.8" />
+      <module name="summary-knowledge-mongo" target="1.8" />
+      <module name="summary-knowledge-parent" target="1.8" />
+      <module name="summary-knowledge-quartz" target="1.8" />
+      <module name="summary-knowledge-redis" target="1.8" />
+      <module name="summary-knowledge-solr" target="1.8" />
+      <module name="summary-knowledge-spark" target="1.8" />
+      <module name="summary-knowledge-springbatch" target="1.8" />
+      <module name="summary-knowledge-springintergration" target="1.8" />
+      <module name="summary-knowledge-springmvc" target="1.8" />
+      <module name="summary-knowledge-webservice" target="1.8" />
+      <module name="summary-knowledge-zk" target="1.8" />
+      <module name="test-sofa-boot-starter" target="1.7" />
+    </bytecodeTargetLevel>
   </component>
 </project>
