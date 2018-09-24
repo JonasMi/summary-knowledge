@@ -1,12 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="healthcheck-sofa-boot-starter" />
+        <module name="infra-sofa-boot-starter" />
+        <module name="isle-sofa-boot-starter" />
+        <module name="runtime-sofa-boot-starter" />
+        <module name="service-consumer" />
+        <module name="service-facade" />
+        <module name="service-provider" />
+        <module name="sofa-boot-run" />
+        <module name="sofa-boot-sample" />
+        <module name="sofaboot-sample-with-isolation" />
+        <module name="sofaboot-sample-with-rpc" />
+        <module name="summary-knowledge-mybatis" />
+        <module name="summary-knowledge-redis" />
+        <module name="summary-knowledge-springframework" />
+        <module name="test-sofa-boot-starter" />
+      </profile>
+    </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="healthcheck-sofa-boot-starter" target="1.7" />
       <module name="infra-sofa-boot-starter" target="1.7" />
       <module name="isle-sofa-boot-starter" target="1.7" />
       <module name="runtime-sofa-boot-starter" target="1.7" />
+      <module name="service-consumer" target="1.7" />
+      <module name="service-facade" target="1.7" />
+      <module name="service-provider" target="1.7" />
+      <module name="sofa-boot-run" target="1.7" />
       <module name="sofa-boot-runtime" target="1.7" />
+      <module name="sofa-boot-sample" target="1.7" />
+      <module name="sofaboot-sample-with-isle" target="1.7" />
+      <module name="sofaboot-sample-with-isolation" target="1.7" />
+      <module name="sofaboot-sample-with-rpc" target="1.7" />
+      <module name="sofaboot-samples" target="1.7" />
       <module name="summary-knowledge-amqp" target="1.8" />
       <module name="summary-knowledge-axon" target="1.8" />
       <module name="summary-knowledge-common" target="1.8" />
@@ -14,12 +45,14 @@
       <module name="summary-knowledge-jpa" target="1.8" />
       <module name="summary-knowledge-kafka" target="1.8" />
       <module name="summary-knowledge-mongo" target="1.8" />
+      <module name="summary-knowledge-mybatis" target="1.8" />
       <module name="summary-knowledge-parent" target="1.8" />
       <module name="summary-knowledge-quartz" target="1.8" />
       <module name="summary-knowledge-redis" target="1.8" />
       <module name="summary-knowledge-solr" target="1.8" />
       <module name="summary-knowledge-spark" target="1.8" />
       <module name="summary-knowledge-springbatch" target="1.8" />
+      <module name="summary-knowledge-springframework" target="1.8" />
       <module name="summary-knowledge-springintergration" target="1.8" />
       <module name="summary-knowledge-springmvc" target="1.8" />
       <module name="summary-knowledge-webservice" target="1.8" />
